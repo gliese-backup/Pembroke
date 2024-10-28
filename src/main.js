@@ -1,13 +1,8 @@
-/*
-breeds/list/all = All breeds
-breed/{breedName}/images/random = single image
-*/
-
 import { capitalize } from "./utils";
 
 // DOM Selection
 const selectEl = document.querySelector("select");
-const imgEl = document.querySelector("img");
+const carouselContainer = document.querySelector(".carousel-inner");
 
 // API
 const BASE_URL = `https://dog.ceo/api/`;
@@ -23,11 +18,11 @@ function getDogBreed() {
     .catch((error) => console.log(error));
 }
 
-// Gets a single image on breed
-function getSingleImage(breed) {
-  return fetch(`${BASE_URL}breed/${breed}/images/random`)
+// Gets [imagesx10] on breed
+function getBreedImages(breed) {
+  return fetch(`${BASE_URL}breed/${breed}/images`)
     .then((res) => res.json())
-    .then((data) => data.message)
+    .then((data) => data.message.slice(0, 10))
     .catch((err) => console.log(err));
 }
 
@@ -48,11 +43,13 @@ function renderOptions() {
   });
 }
 
-renderOptions();
+function renderCarousel(breed) {
+  getBreedImages(breed).then((data) => console.log(data));
+}
 
 // Change on user select
 selectEl.addEventListener("change", (event) => {
-  getSingleImage(event.target.value).then((data) => {
-    imgEl.src = data;
-  });
+  renderCarousel(event.target.value);
 });
+
+renderOptions();
