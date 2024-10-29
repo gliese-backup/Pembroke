@@ -1,8 +1,9 @@
+import Carousel from "./components/Carousel";
 import { capitalize } from "./utils";
 
 // DOM Selection
 const selectEl = document.querySelector("select");
-const carouselContainer = document.querySelector(".carousel-inner");
+const carouselContainerEl = document.querySelector(".carousel-inner");
 
 // API
 const BASE_URL = `https://dog.ceo/api/`;
@@ -29,10 +30,10 @@ function getBreedImages(breed) {
 // === MARK: Render
 // Renders options inside select
 function renderOptions() {
-  getDogBreed().then((data) => {
+  getDogBreed().then((breeds) => {
     const fragment = document.createDocumentFragment();
 
-    for (let breed of data) {
+    for (let breed of breeds) {
       const option = document.createElement("option");
       option.textContent = capitalize(breed);
       option.value = breed;
@@ -44,7 +45,12 @@ function renderOptions() {
 }
 
 function renderCarousel(breed) {
-  getBreedImages(breed).then((data) => console.log(data));
+  carouselContainerEl.innerHTML = "";
+
+  getBreedImages(breed).then((images) => {
+    const carousel = Carousel(images);
+    carouselContainerEl.appendChild(carousel);
+  });
 }
 
 // Change on user select
@@ -53,3 +59,4 @@ selectEl.addEventListener("change", (event) => {
 });
 
 renderOptions();
+renderCarousel("affenpinscher");
