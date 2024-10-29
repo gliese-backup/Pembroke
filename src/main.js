@@ -47,7 +47,10 @@ function renderOptions() {
 function renderCarousel(breed) {
   carouselContainerEl.innerHTML = "";
 
+  carouselContainerEl.appendChild(Carousel(["loader.gif"]));
+
   getBreedImages(breed).then((images) => {
+    carouselContainerEl.innerHTML = "";
     const carousel = Carousel(images);
     carouselContainerEl.appendChild(carousel);
   });
